@@ -1,0 +1,26 @@
+<annotation>
+	<folder>JPEGImages</folder>
+	<filename>0109.png</filename>
+	<path>E:\yolov5\VOCdevkit\VOC2007\JPEGImages\0109.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1012</width>
+		<height>729</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>balloon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>477</xmin>
+			<ymin>377</ymin>
+			<xmax>515</xmax>
+			<ymax>421</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,31 @@
+debug_mode: False
+use_log: True
+robot_id: 0
+
+role_info:
+    is_client: True
+    id: 'vehicle-03'
+
+network_info:
+    ip: '127.0.0.1'
+
+    target_info:
+        # ip: '172.16.10.3'
+        ip: '127.0.0.1'
+
+message_info:
+    msg:
+        is_tcp: True
+        port: 21000
+    odm:
+        is_tcp: True
+        port: 22000
+    pcd:
+        is_tcp: True
+        port: 23000
+    cmd:
+        is_tcp: True
+        port: 24000
+    img:
+        is_tcp: True
+        port: 25000

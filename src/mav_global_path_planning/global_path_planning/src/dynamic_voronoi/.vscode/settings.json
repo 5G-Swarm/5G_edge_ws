@@ -1,0 +1,13 @@
+{
+    "ros.distro": "melodic",
+    "python.autoComplete.extraPaths": [
+        "/home/cita/0project/5G_project/global_path_planning_github_local/devel/lib/python2.7/dist-packages",
+        "/home/cita/0project/frontier_detection_ws/reference_code/cartographer_ws/install_isolated/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ],
+    "files.associations": {
+        "*.cpp": "cpp",
+        "*.py": "python",
+        "iosfwd": "cpp"
+    }
+}

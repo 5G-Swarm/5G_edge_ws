@@ -1,0 +1,37 @@
+debug_mode: False
+use_log: True
+robot_id: 0
+
+role_info:
+    is_client: False
+    id: 'edge-01'
+
+network_info:
+    ip: '127.0.0.1'
+
+    target_info:
+        ip: '127.0.0.1'
+
+message_info:
+    msg:
+        is_tcp: True
+        port: 11000
+    odm:
+        is_tcp: True
+        port: 12000
+    pcd:
+        is_tcp: True
+        port: 13000
+    cmd:
+        is_tcp: True
+        port: 14000
+    img:
+        is_tcp: True
+        port: 15000
+    rtk:
+        is_tcp: True
+        port: 16000
+    ldr:
+        is_tcp: True
+        port: 17000
+        

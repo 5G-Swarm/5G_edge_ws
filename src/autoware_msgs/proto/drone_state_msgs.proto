@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package drone_state_msgs;
+
+message DroneState {
+    GPS      gps    = 1;
+    IMU      imu    = 2;
+}
+
+message GPS{
+    double lon_x = 1;
+    double lat_y = 2;
+    double alt_z = 3;
+    double vx = 4;
+    double vy = 5;
+    double vz = 6;
+}
+
+message IMU{
+    double quan_x = 1;
+    double quan_y = 2;
+    double quan_z = 3;
+    double quan_w = 4;
+    double w_x =  5;
+    double w_y =  6;
+    double w_z =  7;
+}

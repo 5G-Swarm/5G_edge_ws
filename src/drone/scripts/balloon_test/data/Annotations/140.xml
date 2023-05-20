@@ -1,0 +1,26 @@
+<annotation>
+	<folder>JPEGImages</folder>
+	<filename>140.jpg</filename>
+	<path>E:\yolov5\VOCdevkit\VOC2007\JPEGImages\140.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>360</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>balloon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>537</xmin>
+			<ymin>129</ymin>
+			<xmax>640</xmax>
+			<ymax>273</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,8 @@
+*.pyc
+*.egg-info/
+__pycache__/
+results/
+logs/
+rl_code/results
+rl_code/logs
+*/__pycache__/

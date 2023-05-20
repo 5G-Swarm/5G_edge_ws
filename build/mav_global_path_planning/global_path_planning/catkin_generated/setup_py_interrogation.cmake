@@ -1,0 +1,7 @@
+set(global_path_planning_SETUP_PY_SETUP_MODULE "distutils.core")
+set(global_path_planning_SETUP_PY_VERSION "2.1.4")
+set(global_path_planning_SETUP_PY_SCRIPTS "")
+set(global_path_planning_SETUP_PY_PACKAGES "global_path_planning")
+set(global_path_planning_SETUP_PY_PACKAGE_DIRS "src/global_path_planning")
+set(global_path_planning_SETUP_PY_MODULES "")
+set(global_path_planning_SETUP_PY_MODULE_DIRS "")

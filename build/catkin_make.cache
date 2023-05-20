@@ -1,0 +1,2 @@
+autoware_msgs:balloon_estimation:drone:mav_global_path_planning/global_path_planning:mav_global_path_planning/map_pub:ros-edge-transfer/ros-edge-transfer:vehicle-msg-transfer
+-DCATKIN_DEVEL_PREFIX=/home/ubuntu/5g-ws/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/5g-ws/install -G Unix Makefiles

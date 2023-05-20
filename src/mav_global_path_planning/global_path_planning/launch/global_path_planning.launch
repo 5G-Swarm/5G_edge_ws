@@ -1,0 +1,12 @@
+<launch>
+  <arg name="/use_sim_time" value="true"/>
+  <node name="global_path_planning" pkg="global_path_planning" type="global_path_planning_" output="screen"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" output="screen" args="$(find map_pub)/map/5G.yaml">
+    <!-- <param name="inflation/cost_scaling_factor" value="100" /> -->
+  </node>
+  <node name="map_pub_cyclic" pkg="map_pub" type="map_pub" output="screen"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find map_pub)/rviz/map.rviz" />
+</launch>
+
+

@@ -1,0 +1,3 @@
+用改过的文件复制改
+train: ../yolov5/VOCdevkit/images/train/ 
+val: ../yolov5/VOCdevkit/images/val/ 

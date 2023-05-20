@@ -1,0 +1,13 @@
+(cl:defpackage autoware_msgs-msg
+  (:use )
+  (:export
+   "<DRONESYN>"
+   "DRONESYN"
+   "<POSE2DARRAY>"
+   "POSE2DARRAY"
+   "<TRACKINGOBJECTMARKER>"
+   "TRACKINGOBJECTMARKER"
+   "<TRACKINGOBJECTMARKERARRAY>"
+   "TRACKINGOBJECTMARKERARRAY"
+  ))
+

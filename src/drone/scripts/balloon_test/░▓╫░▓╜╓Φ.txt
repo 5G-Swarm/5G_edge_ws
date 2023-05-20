@@ -1,0 +1,4 @@
+conda activate yolov5(环境名）
+conda install pytorch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 cudatoolkit=11.1 -c pytorch -c conda-forge
+cd D:\yolov5
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt

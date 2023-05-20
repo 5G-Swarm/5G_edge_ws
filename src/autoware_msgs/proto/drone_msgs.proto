@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package drone_msgs;
+
+
+message Gps{
+    double altitude = 1;
+    double latitude = 2;
+    double longtitude = 3;
+
+    double lin_vel_x = 4;
+    double lin_vel_y = 5;
+    double lin_vel_z = 6;
+}
+
+message Imu{
+    double orin_x = 1;
+    double orin_y = 2;
+    double orin_z = 3;
+    double orin_w = 4;
+
+    double ang_vel_x = 5;
+    double ang_vel_y = 6;
+    double ang_vel_z = 7;
+}
+
+message Odom{
+    double orin_w = 1;    
+    double orin_x = 2;
+    double orin_y = 3;
+    double orin_z = 4;
+
+    double pos_x = 5; 
+    double pos_y = 6;    
+    double pos_z = 7;
+
+    double ang_vel_x = 8;
+    double ang_vel_y = 9;
+    double ang_vel_z = 10;
+
+    double lin_vel_x = 11;
+    double lin_vel_y = 12;
+    double lin_vel_z = 13;
+}
+
+message BatteryState{
+    double cell_vol = 1;
+    double rate = 2;
+
+}
+

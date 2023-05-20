@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package ctrl_msgs;
+
+message Ctrl{
+    double flag = 1;
+    double v = 2;
+    double w = 3;
+}

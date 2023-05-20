@@ -1,0 +1,92 @@
+0:
+ssh ubuntu@172.16.0.38
+1:
+ssh ubuntu@172.16.0.42
+2:
+ssh ubuntu@172.16.0.32
+3:
+ssh ubuntu@172.16.0.40
+4:
+ssh ubuntu@172.16.0.41
+5:
+ssh ubuntu@172.16.0.37
+6:
+ssh ubuntu@172.16.0.34
+7:
+ssh ubuntu@172.16.0.33
+8:
+ssh ubuntu@172.16.0.36
+9:
+ssh ubuntu@172.16.0.35
+10:
+ssh ubuntu@172.16.0.39
+11:
+ssh ubuntu@172.16.0.22
+12:
+ssh ubuntu@172.16.0.21
+13
+ssh ubuntu@172.16.0.31
+14
+ssh ubuntu@172.16.0.30
+
+rostopic hz /camera/color/image_raw
+rostopic hz /mavros/global_position/global
+rostopic echo /mavros/global_position/global
+start point:
+-11.360347121953964, 44.9785798182711, 23.809718887756414, 0.025699523168826944, -0.04288979492717268, -0.01]
+[-0.6793933063745499, 45.645795203745365, 19.91294697572246, -0.005222009053255059, -0.008528224988104042, 0.0]
+latitude: 30.2663746
+longitude: 120.1196506
+altitude: 19.835945856837377
+end point:
+[13.353976666927338, -48.53966494742781, 24.600621517978567, -0.1090912310026597, -0.01411039752538314, -0.07]
+
+[-5.602210395038128, -51.90073827281594, 19.901248112496383, 0.011018355798506586, 0.016691190355918786, 0.02]
+cd ~/catkin_ws/bash/
+sh launch.sh
+
+
+
+cd ~/catkin_ws/src/ros_transfer_drone/scripts/
+python3 robot_drone_rosimg_control.py
+
+
+##########edge##############################
+rostopic hz /drone_state_1
+rostopic hz /drone_image_1
+rostopic hz /target_bbx_1
+
+
+
+p1:south east menzhu
+33426098.570727233, 7649963.173209962, 16.898870265141262
+120.1195315, 30.2653633
+p2:south blue box, west north point
+33426113.606480777, 7649971.505006747, 17.170325449231427
+120.119662, 30.26526
+p3:north box ,west,south point
+33426149.73683967, 7649891.406115385, 17.33997132707688,
+120.1199918, 30.2662201
+p4:north goal,west column
+33426130.557900704, 7649890.80562208, 17.619535712061904
+120.1198195, 30.2662311
+
+####drone_7 compare
+A
+latitude: 30.2663456
+longitude: 120.1195328
+B
+latitude: 30.2661309
+longitude: 120.1194913
+
+####drone_5 compare
+A
+latitude: 30.2661396
+longitude: 120.1194965
+B
+
+
+
+
+
+

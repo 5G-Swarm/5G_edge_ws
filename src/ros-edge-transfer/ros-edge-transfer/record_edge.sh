@@ -1,0 +1,1 @@
+rosbag record /drone_state_0 /drone_state_1 /drone_state_2 /drone_state_3 /drone_state_4 /drone_image_0 /target_bbx_0 /drone_image_1 /target_bbx_1 /drone_image_2 /target_bbx_2 /drone_image_3 /target_bbx_3 /drone_image_4 /target_bbx_4 /teamrl_controller_vel

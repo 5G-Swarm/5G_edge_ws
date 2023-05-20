@@ -1,0 +1,10 @@
+image: empty_big_map.png
+resolution: 0.5000
+origin: [0.0, 0.0, 0.0]
+occupied_thresh: 0.65
+free_thresh: 0.30
+negate: 0
+
+# static_map: true 
+inflation_radius: 100
+# cost_scaling_factor: 0.2 

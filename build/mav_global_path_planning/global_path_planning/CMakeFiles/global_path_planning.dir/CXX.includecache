@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning/include/KDTree/KDTree.hpp
+algorithm
+-
+functional
+-
+memory
+-
+vector
+-
+
+/home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning/src/KDTree/KDTree.cpp
+algorithm
+-
+cmath
+-
+functional
+-
+iterator
+-
+limits
+-
+memory
+-
+vector
+-
+KDTree/KDTree.hpp
+/home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning/src/KDTree/KDTree/KDTree.hpp
+
