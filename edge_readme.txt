@@ -12,11 +12,9 @@ Edge端操作手册：
 
 
 ##三, edge端运行
-1. wait for all drones starting their drone-5g-transfer programs.
+1. wait for all ms.
 2. start the edge-5g-transfer: 
-cd ~/5g-ws/src/ros-edge-transfer/ros-edge-transfer/scripts
-conda activate base 
-python edge-drone.py
+cd ~/5g-ws/src/ros-edge-transfer/ros-edge-transfer/scripts && conda activate base && python edge-drone.py
 #check state topics: 
 rostopic hz /drone_state_x 
 #open rviz to check images from drones: subscribe to /drone_image_x(x:0-9)
@@ -32,8 +30,7 @@ roslaunch balloon_estimation balloon_estimation.launch
 
 5. open the teamrl_controller program:
 #Note:check the loaded model,  
-cd ~/5g-ws/src/drone/scripts/MavenRL/real_controller
-python teamrl_controller.py
+cd ~/5g-ws/src/drone/scripts/MavenRL/real_controller && python teamrl_controller.py
 
 6. check the command download:
 check each drone from the output of their 5g-transfer program for "TAKE OFF"

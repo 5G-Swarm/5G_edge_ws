@@ -245,7 +245,7 @@ def send_cmd_callback(ros_cmd_msg):
     cmd.vy = ros_cmd_msg.twist.linear.y#1.0
     cmd.vz = ros_cmd_msg.twist.linear.z#1.0
     cmd.wz = ros_cmd_msg.twist.angular.z#1.0
-    cmd.flag = drone_cmd_msgs_pb2.CmdType.Value("TAKE_OFF")
+    cmd.flag = drone_cmd_msgs_pb2.CmdType.Value("TAKE_OFF")#TAKE_OFF
     # print("shahao",drone_cmd_msgs_pb2.CmdType.Name(cmd.flag))
     # import pdb;pdb.set_trace()
     cmd_data = cmd.SerializeToString()

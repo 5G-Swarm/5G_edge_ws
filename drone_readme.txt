@@ -43,6 +43,6 @@
 
 
 ##五, drone端运行
-启动：cd ~/catkin_ws/bash; sh launch.sh(rostopic echo /mavros/global_position/global;rostopic echo /camera/color/image_raw)
-转发：cd ~/catkin_ws/src/ros_transfer_drone/scripts; python3 robot_drone_rosimg_control.py(分别有gps,image信息的上传和相应时间戳)
+启动：cd ~/catkin_ws/bash && sh launch.sh(rostopic echo /mavros/global_position/global;rostopic echo /camera/color/image_raw)
+转发：cd ~/catkin_ws/src/ros_transfer_drone/scripts && python3 robot_drone_rosimg_control.py(分别有gps,image信息的上传和相应时间戳)
 
