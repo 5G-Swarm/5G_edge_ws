@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -std=c++11 -O3 -Wall -g  -shared -Wl,-soname,libballoon_estimation.so -o /home/ubuntu/5G_edge_ws/devel/lib/libballoon_estimation.so CMakeFiles/balloon_estimation.dir/src/ekf.cpp.o 
