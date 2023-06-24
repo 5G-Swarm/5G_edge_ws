@@ -1,8 +1,0 @@
-prefix=/home/ubuntu/5g-ws/install
-
-Name: balloon_estimation
-Description: Description of balloon_estimation
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

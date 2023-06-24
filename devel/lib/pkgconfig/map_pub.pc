@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/5g-ws/devel
+prefix=/home/ubuntu/5G_edge_ws/devel
 
 Name: map_pub
 Description: Description of map_pub

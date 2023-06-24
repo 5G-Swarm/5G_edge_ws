@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/5g-ws/devel
+prefix=/home/ubuntu/5G_edge_ws/devel
 
 Name: global_path_planning
 Description: Description of global_path_planning
