@@ -67,14 +67,14 @@ set(balloon_estimation_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(balloon_estimation_SOURCE_PREFIX /home/ubuntu/5g-ws/src/balloon_estimation)
-  set(balloon_estimation_DEVEL_PREFIX /home/ubuntu/5g-ws/devel)
+  set(balloon_estimation_SOURCE_PREFIX /home/ubuntu/5G_edge_ws/src/balloon_estimation)
+  set(balloon_estimation_DEVEL_PREFIX /home/ubuntu/5G_edge_ws/devel)
   set(balloon_estimation_INSTALL_PREFIX "")
   set(balloon_estimation_PREFIX ${balloon_estimation_DEVEL_PREFIX})
 else()
   set(balloon_estimation_SOURCE_PREFIX "")
   set(balloon_estimation_DEVEL_PREFIX "")
-  set(balloon_estimation_INSTALL_PREFIX /home/ubuntu/5g-ws/install)
+  set(balloon_estimation_INSTALL_PREFIX /home/ubuntu/5G_edge_ws/install)
   set(balloon_estimation_PREFIX ${balloon_estimation_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/5g-ws/install/lib;/home/ubuntu/rospy3_base_ws/devel/lib;/home/ubuntu/5g-ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/ubuntu/5G_edge_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(balloon_estimation_LIBRARIES ${balloon_estimation_LIBRARIES})
 
   _list_append_unique(balloon_estimation_LIBRARY_DIRS ${${balloon_estimation_dep}_LIBRARY_DIRS})
-  list(APPEND balloon_estimation_EXPORTED_TARGETS ${${balloon_estimation_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(balloon_estimation_EXPORTED_TARGETS ${${balloon_estimation_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

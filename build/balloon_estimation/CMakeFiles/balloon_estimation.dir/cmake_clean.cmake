@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/lib/libballoon_estimation.pdb"
+  "/home/ubuntu/5G_edge_ws/devel/lib/libballoon_estimation.so"
   "CMakeFiles/balloon_estimation.dir/src/ekf.cpp.o"
-  "/home/ubuntu/5g-ws/devel/lib/libballoon_estimation.pdb"
-  "/home/ubuntu/5g-ws/devel/lib/libballoon_estimation.so"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/5g-ws/src/mav_global_path_planning/map_pub
+# Install script for directory: /home/ubuntu/5G_edge_ws/src/mav_global_path_planning/map_pub
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/5g-ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/5G_edge_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,18 +38,18 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/5g-ws/build/mav_global_path_planning/map_pub/catkin_generated/installspace/map_pub.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/map_pub/catkin_generated/installspace/map_pub.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/map_pub/cmake" TYPE FILE FILES
-    "/home/ubuntu/5g-ws/build/mav_global_path_planning/map_pub/catkin_generated/installspace/map_pubConfig.cmake"
-    "/home/ubuntu/5g-ws/build/mav_global_path_planning/map_pub/catkin_generated/installspace/map_pubConfig-version.cmake"
+    "/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/map_pub/catkin_generated/installspace/map_pubConfig.cmake"
+    "/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/map_pub/catkin_generated/installspace/map_pubConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/map_pub" TYPE FILE FILES "/home/ubuntu/5g-ws/src/mav_global_path_planning/map_pub/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/map_pub" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/src/mav_global_path_planning/map_pub/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -59,12 +59,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/map_pub/map_pub"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/map_pub" TYPE EXECUTABLE FILES "/home/ubuntu/5g-ws/devel/lib/map_pub/map_pub")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/map_pub" TYPE EXECUTABLE FILES "/home/ubuntu/5G_edge_ws/devel/lib/map_pub/map_pub")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/map_pub/map_pub" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/map_pub/map_pub")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/map_pub/map_pub"
-         OLD_RPATH "/home/ubuntu/rospy3_base_ws/devel/lib:/opt/ros/melodic/lib:"
+         OLD_RPATH "/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/map_pub/map_pub")
@@ -73,6 +73,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/map_pub/launch" TYPE DIRECTORY FILES "/home/ubuntu/5g-ws/src/mav_global_path_planning/map_pub/launch/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/map_pub/launch" TYPE DIRECTORY FILES "/home/ubuntu/5G_edge_ws/src/mav_global_path_planning/map_pub/launch/")
 endif()
 

@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/5g-ws/install
+prefix=/home/ubuntu/5G_edge_ws/install
 
 Name: map_pub
 Description: Description of map_pub

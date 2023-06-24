@@ -7,5 +7,10 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/ubuntu/5g-ws/build'
-export PYTHONPATH='/home/ubuntu/5g-ws/devel/lib/python2.7/dist-packages:/opt/ros/melodic/lib/python2.7/dist-packages:/home/ubuntu/rospy3_base_ws/devel/lib/python3/dist-packages'
+export CMAKE_PREFIX_PATH="/home/ubuntu/5G_edge_ws/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/ubuntu/5G_edge_ws/devel/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/ubuntu/5G_edge_ws/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
+export PWD='/home/ubuntu/5G_edge_ws/build'
+export PYTHONPATH="/home/ubuntu/5G_edge_ws/devel/lib/python3/dist-packages:$PYTHONPATH"
+export ROSLISP_PACKAGE_DIRECTORIES='/home/ubuntu/5G_edge_ws/devel/share/common-lisp'
+export ROS_PACKAGE_PATH="/home/ubuntu/5G_edge_ws/src:$ROS_PACKAGE_PATH"

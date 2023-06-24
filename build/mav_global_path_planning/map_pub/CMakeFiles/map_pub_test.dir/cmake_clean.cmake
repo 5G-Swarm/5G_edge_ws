@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/lib/map_pub/map_pub_test"
+  "/home/ubuntu/5G_edge_ws/devel/lib/map_pub/map_pub_test.pdb"
   "CMakeFiles/map_pub_test.dir/src/map_pub_test.cpp.o"
-  "/home/ubuntu/5g-ws/devel/lib/map_pub/map_pub_test.pdb"
-  "/home/ubuntu/5g-ws/devel/lib/map_pub/map_pub_test"
 )
 
 # Per-language clean rules from dependency scanning.

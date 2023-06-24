@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/lib/python3/dist-packages/autoware_msgs/msg/_DroneSyn.py"
+  "/home/ubuntu/5G_edge_ws/devel/lib/python3/dist-packages/autoware_msgs/msg/__init__.py"
   "CMakeFiles/autoware_msgs_generate_messages_py"
-  "/home/ubuntu/5g-ws/devel/lib/python2.7/dist-packages/autoware_msgs/msg/_DroneSyn.py"
-  "/home/ubuntu/5g-ws/devel/lib/python2.7/dist-packages/autoware_msgs/msg/__init__.py"
 )
 
 # Per-language clean rules from dependency scanning.

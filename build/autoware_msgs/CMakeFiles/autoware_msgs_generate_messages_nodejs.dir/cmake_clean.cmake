@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/share/gennodejs/ros/autoware_msgs/msg/DroneSyn.js"
   "CMakeFiles/autoware_msgs_generate_messages_nodejs"
-  "/home/ubuntu/5g-ws/devel/share/gennodejs/ros/autoware_msgs/msg/DroneSyn.js"
 )
 
 # Per-language clean rules from dependency scanning.

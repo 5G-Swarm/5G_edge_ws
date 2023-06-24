@@ -67,14 +67,14 @@ set(drone_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(drone_SOURCE_PREFIX /home/ubuntu/5g-ws/src/drone)
-  set(drone_DEVEL_PREFIX /home/ubuntu/5g-ws/devel)
+  set(drone_SOURCE_PREFIX /home/ubuntu/5G_edge_ws/src/drone)
+  set(drone_DEVEL_PREFIX /home/ubuntu/5G_edge_ws/devel)
   set(drone_INSTALL_PREFIX "")
   set(drone_PREFIX ${drone_DEVEL_PREFIX})
 else()
   set(drone_SOURCE_PREFIX "")
   set(drone_DEVEL_PREFIX "")
-  set(drone_INSTALL_PREFIX /home/ubuntu/5g-ws/install)
+  set(drone_INSTALL_PREFIX /home/ubuntu/5G_edge_ws/install)
   set(drone_PREFIX ${drone_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/5g-ws/install/lib;/home/ubuntu/rospy3_base_ws/devel/lib;/home/ubuntu/5g-ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/ubuntu/5G_edge_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(drone_LIBRARIES ${drone_LIBRARIES})
 
   _list_append_unique(drone_LIBRARY_DIRS ${${drone_dep}_LIBRARY_DIRS})
-  list(APPEND drone_EXPORTED_TARGETS ${${drone_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(drone_EXPORTED_TARGETS ${${drone_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

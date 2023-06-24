@@ -67,14 +67,14 @@ set(ros-edge-transfer_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(ros-edge-transfer_SOURCE_PREFIX /home/ubuntu/5g-ws/src/ros-edge-transfer/ros-edge-transfer)
-  set(ros-edge-transfer_DEVEL_PREFIX /home/ubuntu/5g-ws/devel)
+  set(ros-edge-transfer_SOURCE_PREFIX /home/ubuntu/5G_edge_ws/src/ros-edge-transfer/ros-edge-transfer)
+  set(ros-edge-transfer_DEVEL_PREFIX /home/ubuntu/5G_edge_ws/devel)
   set(ros-edge-transfer_INSTALL_PREFIX "")
   set(ros-edge-transfer_PREFIX ${ros-edge-transfer_DEVEL_PREFIX})
 else()
   set(ros-edge-transfer_SOURCE_PREFIX "")
   set(ros-edge-transfer_DEVEL_PREFIX "")
-  set(ros-edge-transfer_INSTALL_PREFIX /home/ubuntu/5g-ws/install)
+  set(ros-edge-transfer_INSTALL_PREFIX /home/ubuntu/5G_edge_ws/install)
   set(ros-edge-transfer_PREFIX ${ros-edge-transfer_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/5g-ws/install/lib;/home/ubuntu/rospy3_base_ws/devel/lib;/home/ubuntu/5g-ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/ubuntu/5G_edge_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(ros-edge-transfer_LIBRARIES ${ros-edge-transfer_LIBRARIES})
 
   _list_append_unique(ros-edge-transfer_LIBRARY_DIRS ${${ros-edge-transfer_dep}_LIBRARY_DIRS})
-  list(APPEND ros-edge-transfer_EXPORTED_TARGETS ${${ros-edge-transfer_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(ros-edge-transfer_EXPORTED_TARGETS ${${ros-edge-transfer_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "ros-edge-transfer-msg-extras.cmake")

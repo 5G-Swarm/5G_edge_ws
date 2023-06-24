@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/lib/libdynamicvoronoi.pdb"
+  "/home/ubuntu/5G_edge_ws/devel/lib/libdynamicvoronoi.so"
   "CMakeFiles/dynamicvoronoi.dir/src/dynamic_voronoi/dynamicvoronoi.cpp.o"
-  "/home/ubuntu/5g-ws/devel/lib/libdynamicvoronoi.pdb"
-  "/home/ubuntu/5g-ws/devel/lib/libdynamicvoronoi.so"
 )
 
 # Per-language clean rules from dependency scanning.

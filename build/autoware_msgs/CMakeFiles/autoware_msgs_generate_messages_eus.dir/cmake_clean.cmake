@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/share/roseus/ros/autoware_msgs/manifest.l"
+  "/home/ubuntu/5G_edge_ws/devel/share/roseus/ros/autoware_msgs/msg/DroneSyn.l"
   "CMakeFiles/autoware_msgs_generate_messages_eus"
-  "/home/ubuntu/5g-ws/devel/share/roseus/ros/autoware_msgs/msg/DroneSyn.l"
-  "/home/ubuntu/5g-ws/devel/share/roseus/ros/autoware_msgs/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.

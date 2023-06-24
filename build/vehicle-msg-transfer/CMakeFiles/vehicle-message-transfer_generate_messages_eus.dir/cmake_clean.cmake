@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/share/roseus/ros/vehicle-message-transfer/manifest.l"
   "CMakeFiles/vehicle-message-transfer_generate_messages_eus"
-  "/home/ubuntu/5g-ws/devel/share/roseus/ros/vehicle-message-transfer/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.

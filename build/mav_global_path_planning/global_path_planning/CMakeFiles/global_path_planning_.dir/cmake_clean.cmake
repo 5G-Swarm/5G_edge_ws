@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/lib/global_path_planning/global_path_planning_"
+  "/home/ubuntu/5G_edge_ws/devel/lib/global_path_planning/global_path_planning_.pdb"
   "CMakeFiles/global_path_planning_.dir/src/global_path_planning.cpp.o"
-  "/home/ubuntu/5g-ws/devel/lib/global_path_planning/global_path_planning_.pdb"
-  "/home/ubuntu/5g-ws/devel/lib/global_path_planning/global_path_planning_"
 )
 
 # Per-language clean rules from dependency scanning.

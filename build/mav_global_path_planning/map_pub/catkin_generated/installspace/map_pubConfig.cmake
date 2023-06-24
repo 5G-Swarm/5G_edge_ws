@@ -67,14 +67,14 @@ set(map_pub_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(map_pub_SOURCE_PREFIX /home/ubuntu/5g-ws/src/mav_global_path_planning/map_pub)
-  set(map_pub_DEVEL_PREFIX /home/ubuntu/5g-ws/devel)
+  set(map_pub_SOURCE_PREFIX /home/ubuntu/5G_edge_ws/src/mav_global_path_planning/map_pub)
+  set(map_pub_DEVEL_PREFIX /home/ubuntu/5G_edge_ws/devel)
   set(map_pub_INSTALL_PREFIX "")
   set(map_pub_PREFIX ${map_pub_DEVEL_PREFIX})
 else()
   set(map_pub_SOURCE_PREFIX "")
   set(map_pub_DEVEL_PREFIX "")
-  set(map_pub_INSTALL_PREFIX /home/ubuntu/5g-ws/install)
+  set(map_pub_INSTALL_PREFIX /home/ubuntu/5G_edge_ws/install)
   set(map_pub_PREFIX ${map_pub_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/5g-ws/install/lib;/home/ubuntu/rospy3_base_ws/devel/lib;/home/ubuntu/5g-ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/ubuntu/5G_edge_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(map_pub_LIBRARIES ${map_pub_LIBRARIES})
 
   _list_append_unique(map_pub_LIBRARY_DIRS ${${map_pub_dep}_LIBRARY_DIRS})
-  list(APPEND map_pub_EXPORTED_TARGETS ${${map_pub_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(map_pub_EXPORTED_TARGETS ${${map_pub_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

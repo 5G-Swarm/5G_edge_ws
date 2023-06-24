@@ -1,5 +1,5 @@
 # generated from catkin/cmake/template/order_packages.context.py.in
-source_root_dir = '/home/ubuntu/5g-ws/src'
+source_root_dir = '/home/ubuntu/5G_edge_ws/src'
 whitelisted_packages = ''.split(';') if '' != '' else []
 blacklisted_packages = ''.split(';') if '' != '' else []
-underlay_workspaces = '/home/ubuntu/rospy3_base_ws/devel;/home/ubuntu/5g-ws/devel;/opt/ros/melodic'.split(';') if '/home/ubuntu/rospy3_base_ws/devel;/home/ubuntu/5g-ws/devel;/opt/ros/melodic' != '' else []
+underlay_workspaces = '/opt/ros/noetic'.split(';') if '/opt/ros/noetic' != '' else []

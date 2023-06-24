@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning
+# Install script for directory: /home/ubuntu/5G_edge_ws/src/mav_global_path_planning/global_path_planning
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/5g-ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/5G_edge_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,22 +38,22 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  include("/home/ubuntu/5g-ws/build/mav_global_path_planning/global_path_planning/catkin_generated/safe_execute_install.cmake")
+  include("/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/global_path_planning/catkin_generated/safe_execute_install.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/5g-ws/build/mav_global_path_planning/global_path_planning/catkin_generated/installspace/global_path_planning.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/global_path_planning/catkin_generated/installspace/global_path_planning.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_path_planning/cmake" TYPE FILE FILES
-    "/home/ubuntu/5g-ws/build/mav_global_path_planning/global_path_planning/catkin_generated/installspace/global_path_planningConfig.cmake"
-    "/home/ubuntu/5g-ws/build/mav_global_path_planning/global_path_planning/catkin_generated/installspace/global_path_planningConfig-version.cmake"
+    "/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/global_path_planning/catkin_generated/installspace/global_path_planningConfig.cmake"
+    "/home/ubuntu/5G_edge_ws/build/mav_global_path_planning/global_path_planning/catkin_generated/installspace/global_path_planningConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_path_planning" TYPE FILE FILES "/home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_path_planning" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/src/mav_global_path_planning/global_path_planning/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -63,7 +63,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libglobal_path_planning.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/ubuntu/5g-ws/devel/lib/libglobal_path_planning.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/ubuntu/5G_edge_ws/devel/lib/libglobal_path_planning.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libglobal_path_planning.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libglobal_path_planning.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -73,6 +73,9 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_path_planning/launch" TYPE DIRECTORY FILES "/home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning/launch/")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_path_planning/launch" TYPE DIRECTORY FILES "/home/ubuntu/5G_edge_ws/src/mav_global_path_planning/global_path_planning/launch/")
 endif()
 

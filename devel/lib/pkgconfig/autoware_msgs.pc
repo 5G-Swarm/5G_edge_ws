@@ -1,8 +1,8 @@
-prefix=/home/ubuntu/5g-ws/devel
+prefix=/home/ubuntu/5G_edge_ws/devel
 
 Name: autoware_msgs
 Description: Description of autoware_msgs
 Version: 0.0.0
-Cflags: -I/home/ubuntu/5g-ws/devel/include
+Cflags: -I/home/ubuntu/5G_edge_ws/devel/include
 Libs: -L${prefix}/lib 
 Requires: message_runtime

@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/5g-ws/install
+prefix=/home/ubuntu/5G_edge_ws/install
 
 Name: ros-edge-transfer
 Description: Description of ros-edge-transfer

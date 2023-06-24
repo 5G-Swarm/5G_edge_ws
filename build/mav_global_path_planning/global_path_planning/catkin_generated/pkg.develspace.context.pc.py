@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "actionlib;actionlib_msgs;costmap_2d;geometry_msgs;map_msgs;move_base_msgs;nav_msgs;roscpp;std_msgs;tf;visualization_msgs".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "global_path_planning"
-PROJECT_SPACE_DIR = "/home/ubuntu/5g-ws/devel"
+PROJECT_SPACE_DIR = "/home/ubuntu/5G_edge_ws/devel"
 PROJECT_VERSION = "2.1.4"

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/5G_edge_ws/devel/share/common-lisp/ros/autoware_msgs/msg/DroneSyn.lisp"
   "CMakeFiles/autoware_msgs_generate_messages_lisp"
-  "/home/ubuntu/5g-ws/devel/share/common-lisp/ros/autoware_msgs/msg/DroneSyn.lisp"
 )
 
 # Per-language clean rules from dependency scanning.

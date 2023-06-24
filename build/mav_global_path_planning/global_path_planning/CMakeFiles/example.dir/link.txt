@@ -1,1 +1,1 @@
-/usr/bin/c++    -rdynamic CMakeFiles/example.dir/src/dynamic_voronoi/example.cpp.o  -o /home/ubuntu/5g-ws/devel/lib/global_path_planning/example -Wl,-rpath,/home/ubuntu/5g-ws/devel/lib /home/ubuntu/5g-ws/devel/lib/libdynamicvoronoi.so 
+/usr/bin/c++    -rdynamic CMakeFiles/example.dir/src/dynamic_voronoi/example.cpp.o  -o /home/ubuntu/5G_edge_ws/devel/lib/global_path_planning/example  -Wl,-rpath,/home/ubuntu/5G_edge_ws/devel/lib /home/ubuntu/5G_edge_ws/devel/lib/libdynamicvoronoi.so 

@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/5g-ws/install
+prefix=/home/ubuntu/5G_edge_ws/install
 
 Name: vehicle-message-transfer
 Description: Description of vehicle-message-transfer

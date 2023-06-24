@@ -67,14 +67,14 @@ set(global_path_planning_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(global_path_planning_SOURCE_PREFIX /home/ubuntu/5g-ws/src/mav_global_path_planning/global_path_planning)
-  set(global_path_planning_DEVEL_PREFIX /home/ubuntu/5g-ws/devel)
+  set(global_path_planning_SOURCE_PREFIX /home/ubuntu/5G_edge_ws/src/mav_global_path_planning/global_path_planning)
+  set(global_path_planning_DEVEL_PREFIX /home/ubuntu/5G_edge_ws/devel)
   set(global_path_planning_INSTALL_PREFIX "")
   set(global_path_planning_PREFIX ${global_path_planning_DEVEL_PREFIX})
 else()
   set(global_path_planning_SOURCE_PREFIX "")
   set(global_path_planning_DEVEL_PREFIX "")
-  set(global_path_planning_INSTALL_PREFIX /home/ubuntu/5g-ws/install)
+  set(global_path_planning_INSTALL_PREFIX /home/ubuntu/5G_edge_ws/install)
   set(global_path_planning_PREFIX ${global_path_planning_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/5g-ws/install/lib;/home/ubuntu/rospy3_base_ws/devel/lib;/home/ubuntu/5g-ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/ubuntu/5G_edge_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(global_path_planning_LIBRARIES ${global_path_planning_LIBRARIES})
 
   _list_append_unique(global_path_planning_LIBRARY_DIRS ${${global_path_planning_dep}_LIBRARY_DIRS})
-  list(APPEND global_path_planning_EXPORTED_TARGETS ${${global_path_planning_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(global_path_planning_EXPORTED_TARGETS ${${global_path_planning_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

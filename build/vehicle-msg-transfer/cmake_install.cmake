@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/5g-ws/src/vehicle-msg-transfer
+# Install script for directory: /home/ubuntu/5G_edge_ws/src/vehicle-msg-transfer
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/5g-ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/5G_edge_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,37 +38,37 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer/cmake" TYPE FILE FILES "/home/ubuntu/5g-ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transfer-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer/cmake" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transfer-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ubuntu/5g-ws/devel/share/roseus/ros/vehicle-message-transfer")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ubuntu/5G_edge_ws/devel/share/roseus/ros/vehicle-message-transfer")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/ubuntu/5g-ws/devel/lib/python2.7/dist-packages/vehicle-message-transfer")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/5G_edge_ws/devel/lib/python3/dist-packages/vehicle-message-transfer")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/ubuntu/5g-ws/devel/lib/python2.7/dist-packages/vehicle-message-transfer")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/ubuntu/5G_edge_ws/devel/lib/python3/dist-packages/vehicle-message-transfer")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/5g-ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transfer.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transfer.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer/cmake" TYPE FILE FILES "/home/ubuntu/5g-ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transfer-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer/cmake" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transfer-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer/cmake" TYPE FILE FILES
-    "/home/ubuntu/5g-ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transferConfig.cmake"
-    "/home/ubuntu/5g-ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transferConfig-version.cmake"
+    "/home/ubuntu/5G_edge_ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transferConfig.cmake"
+    "/home/ubuntu/5G_edge_ws/build/vehicle-msg-transfer/catkin_generated/installspace/vehicle-message-transferConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer" TYPE FILE FILES "/home/ubuntu/5g-ws/src/vehicle-msg-transfer/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/vehicle-message-transfer" TYPE FILE FILES "/home/ubuntu/5G_edge_ws/src/vehicle-msg-transfer/package.xml")
 endif()
 

@@ -67,14 +67,14 @@ set(vehicle-message-transfer_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(vehicle-message-transfer_SOURCE_PREFIX /home/ubuntu/5g-ws/src/vehicle-msg-transfer)
-  set(vehicle-message-transfer_DEVEL_PREFIX /home/ubuntu/5g-ws/devel)
+  set(vehicle-message-transfer_SOURCE_PREFIX /home/ubuntu/5G_edge_ws/src/vehicle-msg-transfer)
+  set(vehicle-message-transfer_DEVEL_PREFIX /home/ubuntu/5G_edge_ws/devel)
   set(vehicle-message-transfer_INSTALL_PREFIX "")
   set(vehicle-message-transfer_PREFIX ${vehicle-message-transfer_DEVEL_PREFIX})
 else()
   set(vehicle-message-transfer_SOURCE_PREFIX "")
   set(vehicle-message-transfer_DEVEL_PREFIX "")
-  set(vehicle-message-transfer_INSTALL_PREFIX /home/ubuntu/5g-ws/install)
+  set(vehicle-message-transfer_INSTALL_PREFIX /home/ubuntu/5G_edge_ws/install)
   set(vehicle-message-transfer_PREFIX ${vehicle-message-transfer_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/5g-ws/install/lib;/home/ubuntu/rospy3_base_ws/devel/lib;/home/ubuntu/5g-ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/ubuntu/5G_edge_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +211,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(vehicle-message-transfer_LIBRARIES ${vehicle-message-transfer_LIBRARIES})
 
   _list_append_unique(vehicle-message-transfer_LIBRARY_DIRS ${${vehicle-message-transfer_dep}_LIBRARY_DIRS})
-  list(APPEND vehicle-message-transfer_EXPORTED_TARGETS ${${vehicle-message-transfer_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(vehicle-message-transfer_EXPORTED_TARGETS ${${vehicle-message-transfer_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "vehicle-message-transfer-msg-extras.cmake")

@@ -8,7 +8,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <memory>
 
 #include <ros/types.h>
 #include <ros/serialization.h>
@@ -106,16 +106,6 @@ namespace message_traits
 
 
 template <class ContainerAllocator>
-struct IsFixedSize< ::autoware_msgs::DroneSyn_<ContainerAllocator> >
-  : FalseType
-  { };
-
-template <class ContainerAllocator>
-struct IsFixedSize< ::autoware_msgs::DroneSyn_<ContainerAllocator> const>
-  : FalseType
-  { };
-
-template <class ContainerAllocator>
 struct IsMessage< ::autoware_msgs::DroneSyn_<ContainerAllocator> >
   : TrueType
   { };
@@ -123,6 +113,16 @@ struct IsMessage< ::autoware_msgs::DroneSyn_<ContainerAllocator> >
 template <class ContainerAllocator>
 struct IsMessage< ::autoware_msgs::DroneSyn_<ContainerAllocator> const>
   : TrueType
+  { };
+
+template <class ContainerAllocator>
+struct IsFixedSize< ::autoware_msgs::DroneSyn_<ContainerAllocator> >
+  : FalseType
+  { };
+
+template <class ContainerAllocator>
+struct IsFixedSize< ::autoware_msgs::DroneSyn_<ContainerAllocator> const>
+  : FalseType
   { };
 
 template <class ContainerAllocator>
