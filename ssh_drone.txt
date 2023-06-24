@@ -1,3 +1,4 @@
+psd:fast
 0:
 ssh ubuntu@172.16.0.38
 1:

@@ -2,5 +2,7 @@
 *.egg-info/
 
 src/autoware_msgs.bak
+build/
+devel/
 
 */__pycache__/

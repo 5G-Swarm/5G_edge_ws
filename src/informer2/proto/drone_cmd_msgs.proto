@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package drone_cmd_msgs;
+
+enum CmdType {
+    AUTO = 0;
+    MANUAL = 1;
+    TAKE_OFF = 2;
+    LANDING = 3;
+}
+
+message DroneCmd {
+    double vx = 1;
+    double vy = 2;
+    double vz = 3;
+    double wz = 4;
+    CmdType flag = 5;
+}

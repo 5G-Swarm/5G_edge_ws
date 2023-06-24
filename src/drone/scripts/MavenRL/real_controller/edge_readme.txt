@@ -14,7 +14,7 @@ Edge端操作手册：
 ##三, edge端运行
 1. wait for all drones starting their drone-5g-transfer programs.
 2. start the edge-5g-transfer: 
-cd ~/5g-ws/src/ros-edge-transfer/ros-edge-transfer/scripts
+cd ~/5G_edge_ws/src/ros-edge-transfer/ros-edge-transfer/scripts
 conda activate base 
 python edge-drone.py
 #check state topics: 

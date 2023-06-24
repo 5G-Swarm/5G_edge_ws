@@ -171,6 +171,7 @@ class ServerR2E(Informer):
 
     def send_cmd(self, message):
         self.send(message, 'cmd')
+        # print("finish_send")
 
 #############################################
 
@@ -245,11 +246,14 @@ def send_cmd_callback(ros_cmd_msg):
     cmd.vy = ros_cmd_msg.twist.linear.y#1.0
     cmd.vz = ros_cmd_msg.twist.linear.z#1.0
     cmd.wz = ros_cmd_msg.twist.angular.z#1.0
-    cmd.flag = drone_cmd_msgs_pb2.CmdType.Value("TAKE_OFF")#TAKE_OFF
-    # print("shahao",drone_cmd_msgs_pb2.CmdType.Name(cmd.flag))
+    if ros_cmd_msg.twist.angular.x:
+        cmd.flag = drone_cmd_msgs_pb2.CmdType.Value("LANDING")#TAKE_OFF
+    else:
+        cmd.flag = drone_cmd_msgs_pb2.CmdType.Value("TAKE_OFF")#TAKE_OFF
     # import pdb;pdb.set_trace()
     cmd_data = cmd.SerializeToString()
     ifm_r2e_dict[robot_id].send_cmd(cmd_data)
+    print("edge_to_"+ros_cmd_msg.header.frame_id+":",drone_cmd_msgs_pb2.CmdType.Name(cmd.flag))
 
 
 if __name__ == '__main__':

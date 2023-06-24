@@ -1,0 +1,30 @@
+multi_vehicle_communication.sh:接收/xtdrone/iris/id/cmd(flu、enu)    pose、vel、accel、cmd
+                               发布  iris/id/mavros/setpoint_raw/local   target_motion
+
+get_local_pose	               发布iris/id/mavros/vision_pose/pose
+
+
+
+leader-follower键盘发出的速度指令为 /xtdrone/leader/cmd_vel_flu
+非leader-follower键盘发出的指令为/xtdrone/iris/id/cmd_vel_flu
+
+
+
+/iris_0/mavros/local_position/pose是准确真值
+/xtdrone/iris_0/cmd_vel_flu是速度真值
+
+
+cd ~/PX4_Firmware
+roslaunch px4 indoor3.launch
+
+
+cd ~/XTDrone/control/keyboard
+python multirotor_keyboard_control.py iris 3 vel
+
+cd ~/XTDrone/sensing/pose_ground_truth
+python get_local_pose.py iris 3
+
+./communication.sh
+./stop_communication.sh
+
+
