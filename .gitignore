@@ -2,6 +2,7 @@
 *.egg-info/
 
 src/autoware_msgs.bak
+src/balloon_estimation/CMakeLists.txt
 build/
 devel/
 

@@ -28,7 +28,9 @@ from cv_bridge import CvBridge
 bridge = CvBridge()
 # HSV颜色空间阈值，用于筛选特定颜色车辆
 redLower = np.array([20, 20, 20])#np.array([156, 43, 46])#np.array([0, 0, 0])#
-redUpper = np.array([255, 255, 255])#np.array([180, 255, 255])
+redUpper = np.array([255, 255, 255])
+# redLower = np.array([20, 20, 20])#np.array([156, 43, 46])#np.array([0, 0, 0])#
+# redUpper = np.array([255, 255, 255])#np.array([180, 255, 255])
 
 device = select_device('')
 half = device.type != 'cpu'  # half precision only supported on CUDA
@@ -341,7 +343,7 @@ class FunctorFactory(object):
 
 if __name__ == '__main__':
     # img = cv2.imread("/home/ubuntu/5g-ws/src/drone/scripts/yolo/inference/images/0106.png")
-    n_agent = 10
+    n_agent = 20
     rospy.init_node('target_bbx', anonymous=True)
     global target_pos_pub_list,image_publisher
     # target_pos_pub = rospy.Publisher('/target_bbx',PoseStamped, queue_size=1)
