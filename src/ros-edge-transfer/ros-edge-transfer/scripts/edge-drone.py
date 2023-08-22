@@ -75,10 +75,9 @@ def parse_img(message, robot_id):
     img_data = message[19:]
     nparr = np.frombuffer(img_data, np.uint8)
     img = cv2.imdecode(nparr,  cv2.IMREAD_COLOR)
-
     ros_img = cv_bridge.cv2_to_imgmsg(img)
     ros_img.header = Header()
-    # ros_img.header.stamp = rospy.Time.now()
+    #ros_img.header.stamp = rospy.Time.now()
     ros_img.header.stamp.secs = ts_secs
     ros_img.header.stamp.nsecs = ts_nsecs
     ros_img.header.frame_id = str(robot_id)

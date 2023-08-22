@@ -5,4 +5,5 @@ results/
 logs/
 rl_code/results
 rl_code/logs
+# output
 */__pycache__/
