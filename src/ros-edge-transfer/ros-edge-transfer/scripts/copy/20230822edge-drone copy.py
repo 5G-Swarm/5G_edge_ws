@@ -142,17 +142,6 @@ def parse_state(message, robot_id):
 
     state_pub_list[robot_id].publish(ros_state)
 
-    ###pub for rviz visulization
-    vis_msg = PoseStamped()
-    vis_msg.header.frame_id = "map"
-    vis_msg.pose.position.x = ros_state.gps[0]
-    vis_msg.pose.position.y = ros_state.gps[1]
-    vis_msg.pose.position.z = ros_state.gps[2]
-    vis_msg.pose.orientation.x = ros_state.imu[0]
-    vis_msg.pose.orientation.y = ros_state.imu[1]
-    vis_msg.pose.orientation.z = ros_state.imu[2]
-    vis_msg.pose.orientation.w = ros_state.imu[3]
-    robot_pos_vis_pub_list[robot_id].publish(vis_msg)
     
     # print('11111\n\n\n\n state', robot_id)
     # relay_state(message, robot_id)
@@ -272,7 +261,6 @@ if __name__ == '__main__':
     img_pub_list = [rospy.Publisher('/drone_image_'+str(i), Image, queue_size=0) for i in range(robot_num)]
     state_pub_list = [rospy.Publisher('/drone_state_'+str(i), DroneSyn, queue_size=0) for i in range(robot_num)]
     gps_pub_list = [rospy.Publisher('/drone_gps_'+str(i), NavSatFix, queue_size=0) for i in range(robot_num)]
-    robot_pos_vis_pub_list = [rospy.Publisher('/drone_vis_pos'+str(i), PoseStamped, queue_size=0) for i in range(robot_num)]
     rospy.Subscriber("/teamrl_controller_vel", TwistStamped, send_cmd_callback)
     pg_xy_publisher = rospy.Publisher('/place_xy', Path, queue_size=0)
     msg_path = Path()

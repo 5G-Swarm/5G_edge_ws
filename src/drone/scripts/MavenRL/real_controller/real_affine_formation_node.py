@@ -43,8 +43,8 @@ class Trajectory_manager(object):
         
         ####task relevant param
         self.obstacle_index_list = [8,9,10,13,14]
-        self.drone_index_list = [7,3,5,6]#12,13,3,4,5
-        self.formation_origin = np.array([0,0,3])   
+        self.drone_index_list = [0,1,2,3]#12,13,3,4,5
+        self.formation_origin = np.array([0,0,3.0])   
         self.real_flag = real_flag
 
 
@@ -56,6 +56,7 @@ class Trajectory_manager(object):
         self.optimized_total_waypoints = [] 
         self.init_template = init_template.copy()
         self.traj_record = []
+        self.accumulate_real_pos_err = np.zeros(self.num_agent)
         # for i in range(self.num_agent):
         #     self.traj_record.append([])
 
@@ -440,18 +441,19 @@ class Trajectory_manager(object):
             print("current stage:",self.stage,"existing_robot_id",self.drone_state.keys())
             ###计算初始队形中心
             flag_get_drone_state = True
-            sum_pos = np.zeros(2)
+            sum_pos = np.zeros(3)
             for drone_id in self.drone_index_list:
                 flag_get_drone_state = flag_get_drone_state & (drone_id in self.drone_state.keys()) 
                 if flag_get_drone_state== False:
                     break
-                sum_pos += self.drone_state[drone_id][:2]                         
+                sum_pos += self.drone_state[drone_id][:3].copy()                         
             
             ###没有拿到初始状态则继续等待
             if flag_get_drone_state== False:
                 continue
 
-            self.formation_origin[:2] = sum_pos/num_agent
+            self.formation_origin[:3] = self.formation_origin[:3] + sum_pos/num_agent
+
             enu_init_formation = TM.optimized_total_waypoints[:,0,:2] + self.formation_origin[:2]  
 
             ###使用匈牙利算法计算轨迹起点匹配,行序列为formation_id,列序列为drone_id
@@ -476,17 +478,18 @@ class Trajectory_manager(object):
         if self.stage is "Prepare" or self.optimized_total_waypoints==[]:return
         # print("here",self.drone_state[0,2])
         # if self.drone_state[0,2] < 0.3: return
+        print("at stage:",self.stage,"assignment",self.traj2drone_id_map,"===============")
         if self.stage=="Init_formation":
             flag_next_stage = True
             for i in range(self.num_agent):
                 drone_id = self.traj2drone_id_map[i]
-                temp = self.optimized_total_waypoints[i,0,:].copy() 
+                temp = self.optimized_total_waypoints[3,0,:].copy() 
                 temp[-1] = 0
                 init_target_pos = self.formation_origin + temp
                 current_pos = self.drone_state[drone_id][:3]
 
                 error = init_target_pos-current_pos
-                flag_next_stage = flag_next_stage and (np.linalg.norm(error)<0.5)
+                flag_next_stage = flag_next_stage and (np.linalg.norm(error)<0.15)#0.5
                 
                 output = error*0.3#2.5
                 output = np.clip(output,-1,1)
@@ -494,13 +497,15 @@ class Trajectory_manager(object):
                 drone_vel_msg = TwistStamped() 
                 drone_vel_msg.header = Header()
                 drone_vel_msg.header.stamp = rospy.Time.now()
-                drone_vel_msg.header.frame_id = str(drone_id)
+                drone_vel_msg.header.frame_id = str(int(drone_id))
                 drone_vel_msg.twist.linear.x = output[0]
                 drone_vel_msg.twist.linear.y = output[1]
                 drone_vel_msg.twist.linear.z = output[2]
                 drone_vel_msg.twist.angular.z = 0
                 self.traj_cmd_publisher.publish(drone_vel_msg) 
-                print("finish pub traj cmd to "+"drone"+"_"+str(drone_id),"output",output,"error",np.linalg.norm(error),"at stage:",self.stage)
+
+                print("self.formation_origin:",self.formation_origin,"current_pos",current_pos)
+                print("drone"+"_"+str(drone_id),"error",error,np.linalg.norm(error),"output",output)
             
             if flag_next_stage:
                 self.stage = "Formation_navigation"   
@@ -510,61 +515,73 @@ class Trajectory_manager(object):
             step = min(self.traj_step,self.optimized_total_waypoints.shape[1]-1)
             flag_step = True
             flag_next_stage = True
+            
             for i in range(self.num_agent):
                 drone_id = self.traj2drone_id_map[i]
-                pos_step = step+5
-                if pos_step >= self.optimized_total_waypoints.shape[1]-1:
-                    temp = self.optimized_total_waypoints[i,-1,:].copy()
+                pos_step = step+0
+                if pos_step >= self.optimized_total_waypoints.shape[1]-2:
+                    temp = self.optimized_total_waypoints[i,-2,:].copy()
+                    pos_step = self.optimized_total_waypoints.shape[1]-2
                 else:    
-                    temp = self.optimized_total_waypoints[i,pos_step,:].copy() 
+                    temp = self.optimized_total_waypoints[i,pos_step,:].copy()
                 temp[-1] = 0
                 follow_target_pos = self.formation_origin + temp
                 if step == self.optimized_total_waypoints.shape[1]-1:
                     target_vel = np.zeros(3)
                 else:    
-                    target_vel = (self.optimized_total_waypoints[i,step+1,:] - self.optimized_total_waypoints[i,step,:])/control_ts
+                    target_vel = (self.optimized_total_waypoints[3,step+1,:] - self.optimized_total_waypoints[3,step,:])/control_ts
                 current_pos = self.drone_state[drone_id][:3]
+                follow_target_pos[-1] = current_pos[-1]
                 pos_error = follow_target_pos-current_pos
                 flag_step = flag_step and (np.linalg.norm(pos_error)<0.5)
                 
-                kp=1#0.5
+                kp=1.0#0.8#1#0.5
                 kv=1
 
                 output = pos_error*kp + target_vel*kv#2.5
-                output = np.clip(output,-1.5,1.5)
+                output = np.clip(output,-2,2)#np.clip(output,-1.5,1.5)
                 ###publish
                 drone_vel_msg = TwistStamped() 
                 drone_vel_msg.header = Header()
                 drone_vel_msg.header.stamp = rospy.Time.now()
-                drone_vel_msg.header.frame_id = str(drone_id)
+                drone_vel_msg.header.frame_id = str(int(drone_id))
                 drone_vel_msg.twist.linear.x = output[0]
                 drone_vel_msg.twist.linear.y = output[1]
-                drone_vel_msg.twist.linear.y = output[2]
+                drone_vel_msg.twist.linear.z = output[2]
                 drone_vel_msg.twist.angular.z = 0
                 self.traj_cmd_publisher.publish(drone_vel_msg) 
                 # print("finish pub traj cmd to "+"drone"+"_"+str(drone_id),"output",output,"pos_error",np.linalg.norm(pos_error),"target_vel",target_vel,"at stage:",self.stage,"at time_step:",step,"assignment",self.traj2drone_id_map)
-                print("pos_error",np.linalg.norm(pos_error),"target_vel",target_vel,"output",output)
+                
 
-                temp = self.optimized_total_waypoints[i,-1,:] 
+                temp = self.optimized_total_waypoints[3,-1,:] 
                 temp[-1] = 0
                 final_target_pos = self.formation_origin + temp
+                final_target_pos[-1] = current_pos[-1]
                 target_error = final_target_pos - current_pos
-                flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<0.1)
+                flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<0.15)
+
+                print("drone"+"_"+str(drone_id),"pos_error",np.linalg.norm(pos_error),"target_error",target_error)
+                print("target_vel",target_vel,"output",output,"at time_step:",step)
 
 
+                real_temp = self.optimized_total_waypoints[i,step,:].copy() 
+                real_temp[-1] = 0
+                real_follow_target_pos = self.formation_origin + real_temp
+                real_error = real_follow_target_pos-current_pos
                 msg = PoseStamped()
                 msg.pose.position.x = pos_error[0]
                 msg.pose.position.y = pos_error[1]
                 msg.pose.position.z = pos_error[2]
                 msg.pose.orientation.x = np.linalg.norm(pos_error)
                 self.traj_follow_err_publisher_list[drone_id].publish(msg)
+                self.accumulate_real_pos_err[i] += np.linalg.norm(real_error)
                 
                 # print("pos of drone"+str(i)+":",pos_err,flag_record,self.drone_state[i,:3])
 
             # if flag_step: self.traj_step += 20
             self.traj_step += 20
 
-            print("flag_next_stage",flag_next_stage)
+            # print("flag_next_stage",flag_next_stage)
             if flag_next_stage:
                 self.stage = "Target_formation" 
 
@@ -572,10 +589,11 @@ class Trajectory_manager(object):
         elif self.stage=="Target_formation":
             for i in range(self.num_agent):
                 drone_id = self.traj2drone_id_map[i]
-                temp = self.optimized_total_waypoints[i,-1,:].copy() 
+                temp = self.optimized_total_waypoints[3,-1,:].copy() 
                 temp[-1] = 0
                 final_target_pos = self.formation_origin + temp
                 current_pos = self.drone_state[drone_id][:3]
+                final_target_pos[-1] = current_pos[-1]
                 error = final_target_pos-current_pos
                 output = error*0.3#2.5
                 output = np.clip(output,-1,1)
@@ -583,12 +601,14 @@ class Trajectory_manager(object):
                 drone_vel_msg = TwistStamped() 
                 drone_vel_msg.header = Header()
                 drone_vel_msg.header.stamp = rospy.Time.now()
-                drone_vel_msg.header.frame_id = str(drone_id)
+                drone_vel_msg.header.frame_id = str(int(drone_id))
                 drone_vel_msg.twist.linear.x = output[0]
                 drone_vel_msg.twist.linear.y = output[1]
-                drone_vel_msg.twist.linear.y = output[2]
+                drone_vel_msg.twist.linear.z = output[2]
                 drone_vel_msg.twist.angular.z = 0
                 self.traj_cmd_publisher.publish(drone_vel_msg) 
+                print("accumulate_real_pos_err of"," robot_",drone_id,":", self.accumulate_real_pos_err[i])
+                
                 # print()
 
 
@@ -630,9 +650,10 @@ class Trajectory_manager(object):
             flag_next_stage = True
             for i in range(self.num_agent):
                 drone_id = self.traj2drone_id_map[i]
-                pos_step = step+5
-                if pos_step >= self.optimized_total_waypoints.shape[1]-1:
-                    temp = self.optimized_total_waypoints[i,-1,:].copy()
+                pos_step = step+20
+                if pos_step >= self.optimized_total_waypoints.shape[1]-2:
+                    temp = self.optimized_total_waypoints[i,-2,:].copy()
+                    pos_step = self.optimized_total_waypoints.shape[1]-2
                 else:    
                     temp = self.optimized_total_waypoints[i,pos_step,:].copy() 
                 temp[-1] = 0
@@ -645,11 +666,11 @@ class Trajectory_manager(object):
                 pos_error = follow_target_pos-current_pos
                 flag_step = flag_step and (np.linalg.norm(pos_error)<0.5)
                 
-                kp=1#0.5
-                kv=1
+                kp=1.7#0.5
+                kv=1.05
 
                 output = pos_error*kp + target_vel*kv#2.5
-                output = np.clip(output,-1.5,1.5)
+                output = np.clip(output,-2,2)
                 drone_vel = Twist() 
                 drone_vel.linear.x = output[0]
                 drone_vel.linear.y = output[1]
@@ -659,19 +680,27 @@ class Trajectory_manager(object):
                 # print("finish pub traj cmd to "+"drone"+"_"+str(drone_id),"output",output,"pos_error",np.linalg.norm(pos_error),"target_vel",target_vel,"at stage:",self.stage,"at time_step:",step,"assignment",self.traj2drone_id_map)
                 print("pos_error",np.linalg.norm(pos_error),"target_vel",target_vel,"output",output)
 
+
+
                 temp = self.optimized_total_waypoints[i,-1,:] 
                 temp[-1] = 0
                 final_target_pos = self.formation_origin + temp
                 target_error = final_target_pos - current_pos
-                flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<0.1)
+                flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<0.05)
 
-
+                real_temp = self.optimized_total_waypoints[i,step,:].copy() 
+                real_temp[-1] = 0
+                real_follow_target_pos = self.formation_origin + real_temp
+                real_error = real_follow_target_pos-current_pos
                 msg = PoseStamped()
-                msg.pose.position.x = pos_error[0]
-                msg.pose.position.y = pos_error[1]
-                msg.pose.position.z = pos_error[2]
-                msg.pose.orientation.x = np.linalg.norm(pos_error)
+                msg.pose.position.x = real_error[0]
+                msg.pose.position.y = real_error[1]
+                msg.pose.position.z = real_error[2]
+                msg.pose.orientation.x = np.linalg.norm(real_error)
+
                 self.traj_follow_err_publisher_list[drone_id].publish(msg)
+                self.accumulate_real_pos_err[i] += np.linalg.norm(real_error)
+
                 
                 # print("pos of drone"+str(i)+":",pos_err,flag_record,self.drone_state[i,:3])
 
@@ -699,7 +728,7 @@ class Trajectory_manager(object):
                 drone_vel.linear.z = output[2]
                 drone_vel.angular.z = 0
                 self.traj_cmd_publisher_list[drone_id].publish(drone_vel)
-                # print()
+                print("accumulate_real_pos_err of"," robot_",drone_id,":", self.accumulate_real_pos_err[i])
 
 
  
@@ -735,8 +764,17 @@ class Trajectory_manager(object):
 
         return rotate_z_rad
     
+    def q2yaw_split(self, qx, qy, qz, qw):
+        q_ = Quaternion(qw, qx, qy, qz)
+        rotate_z_rad = q_.yaw_pitch_roll[0]
+
+        return rotate_z_rad
+    
+
+
+    
     def callback_drone_state_sim(self,msg,id):
-        if self.traj_step%20 != 0: return 
+        # if self.traj_step%20 != 0: return 
 
         self.drone_state[id] = np.zeros(7)
         self.drone_state[id][0] = msg.pose.position.x
@@ -750,10 +788,10 @@ class Trajectory_manager(object):
         self.drone_state[id][0] = msg.gps[0]
         self.drone_state[id][1] = msg.gps[1]
         self.drone_state[id][2] = msg.gps[2]
-        self.drone_state[id][3] = msg.imu[3]
-        self.drone_state[id][4] = msg.imu[4]
-        self.drone_state[id][5] = msg.imu[5]
-        # self.drone_state[id][6] = self.q2yaw(msg.pose.orientation)
+        self.drone_state[id][3] = msg.gps[3]
+        self.drone_state[id][4] = msg.gps[4]
+        self.drone_state[id][5] = msg.gps[5]
+        self.drone_state[id][6] = self.q2yaw_split(msg.imu[0],msg.imu[1],msg.imu[2],msg.imu[3])
 
 
 
@@ -767,7 +805,7 @@ if __name__ == "__main__":
     num_agent = 4
     down_sampling_rate = 1
     control_ts = 0.005
-    real_flag = True
+    real_flag = False
 
 
     
@@ -789,7 +827,7 @@ if __name__ == "__main__":
 
     ### debug param
     for scene_kind in ["real"]:#["spa","mid","den"]:
-        for scene_id in [6]:#[1,2,3,4,5,6,7,8,9,10]
+        for scene_id in [8]:#[1,2,3,4,5,6,7,8,9,10]
             fname_folder = "../output/"+"obs_"+scene_kind+"/"+scene_kind+str(scene_id)
             fname_scene_bag = fname_folder+"/Scene_bag.npy"
             
@@ -876,8 +914,10 @@ if __name__ == "__main__":
                             drone_id = TM.traj2drone_id_map[i]
                             # if drone_id is not in TM.drone_state.keys():
                             #     continue 
-                            
-                            traj_goal = TM.optimized_total_waypoints[i,-1,:]
+                            temp = TM.optimized_total_waypoints[3,-1,:].copy() 
+                            temp[-1] = 0
+                            traj_goal = temp+TM.formation_origin
+
                             goal_point=PoseStamped()
                             goal_point.header.frame_id = 'map'
                             goal_point.pose.position.x=traj_goal[0]
