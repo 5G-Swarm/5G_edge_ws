@@ -11,40 +11,38 @@ from pyquaternion import Quaternion
 import sys
 from gazebo_msgs.srv import *
 from scipy.optimize import linear_sum_assignment
+import torch
+from torch_geometric.data.batch import Batch
+
 sys.path.append("..")
 ##########################
 from gym_formation_particle.gym_flock.envs.env_affine_formation_plan.Img_rrtobs_formation_plan_env import Img_rrtobs_formationPlanEnv as affine_formation 
 
 
+import rllib
+from utils.real_traj_follow_formation_env import trajFollowFormationEnv
 
+from rl_code.real_matd3_gnn_formation_plan import MATD3_DEC as MA_Method 
+from rl_code.args import EnvParams,generate_args
 
+from real_controller.utils.Experience_Graph import Experience_Graph,generate_ring_graph,generate_fully_connected_graph,data_graph_to_cuda
 
-
-# class call_back_template_state(object):
-# 	def __init__(self, name):
-# 		self._name = name
-# 		self._id = int(name[-1])
-
-# 	def __call__(self,drone_state):
-# 		# if real_env.state_drones_dict.has_key(self._id):
-# 		temp = np.array(drone_state.gps+drone_state.imu)
-# 		# temp[0] = temp[0]-33425788.8125
-# 		# temp[1] = -(temp[1]-7650161.05)
-# 		real_env.state_drones_dict[self._id] = temp
-
-# class FunctorFactory_state(object):
-#     def create(self,name):
-#         globals()[name] = call_back_template_state(name)
-
-
+ma_load_path = "../rl_code/results/affine_formation/distributed_traj_follow/delay_system/saved_models"
+ma_model_num = -1
 
 class Trajectory_manager(object):
 
-    def __init__(self,down_sampling_rate,num_agent,real_flag,init_total_waypoints=[],init_template=[]):
+    def __init__(self,down_sampling_rate,num_agent,real_flag,init_total_waypoints=[],init_template=[], flag_use_rtk_sta_obs=False):
         
         ####task relevant param
-        self.obstacle_index_list = [8,9,10,13,14]
+        self.dynamic_obs_index_list = []
+        self.static_obs_index_list = []
         self.drone_index_list = [0,1,2,3]#12,13,3,4,5
+        self.VEL_LIMIT = 1
+        self.traj_step_jump = 20
+        
+        
+        self.total_rtk_index_list = self.static_obs_index_list + self.dynamic_obs_index_list + self.drone_index_list 
         self.formation_origin = np.array([0,0,3.0])   
         self.real_flag = real_flag
 
@@ -67,15 +65,15 @@ class Trajectory_manager(object):
         self.traj_step = 0
         self.stage = "Prepare"#"Prepare","Init_formation","Formation_navigation","Target_formation"
         self.traj2drone_id_map = []#np.zeros(self.num_agent)
-        self.drone_id_list = []
+
         
         self.traj_cmd_publisher_list = {}
         self.pose_sub_list = {}
         self.goal_publisher_list = {}
         self.traj_follow_err_publisher_list = {}
         self.drone_state = {}#np.zeros((self.num_agent,7))
-        for i in range(self.num_agent):
-            drone_id = self.drone_index_list[i]
+        for i in range(len(self.total_rtk_index_list)):
+            drone_id = self.total_rtk_index_list[i]
             # self.traj_cmd_publisher_list.append(rospy.Publisher("/xtdrone/"+self.vehicle_type+'_'+str(i)+"/cmd_pose_enu", Pose, queue_size = 10)) 
             if self.real_flag:
                 self.traj_cmd_publisher = rospy.Publisher("/teamrl_controller_vel", TwistStamped, queue_size = 10)
@@ -88,7 +86,105 @@ class Trajectory_manager(object):
             self.goal_publisher_list[drone_id] = rospy.Publisher(self.vehicle_type+"_"+str(drone_id)+"/move_base_simple/goal", PoseStamped, queue_size=1)
             
 
+        #####################new
+        self.two_points_static_obs_list = []
+        self.flag_use_rtk_sta_obs = flag_use_rtk_sta_obs
+
+        self.num_dyn_obs = len(self.dynamic_obs_index_list)
+        
+        # if self.two_points_static_obs_list is not None:
+        #     self.num_sta_obs = len(self.two_points_static_obs_list)
+        # else:
+        #     self.num_sta_obs = len(self.static_obs_index_list)
+
+        self.dummy_env = trajFollowFormationEnv()
+        self.load_model(ma_load_path, ma_model_num)
+        self.finish_threshold = 0.5
+
             
+
+    ###########################################################################################
+    def load_model(self, ma_load_path, ma_model_num):
+        self.ma_config = rllib.basic.YamlConfig()
+        args = generate_args()
+        self.ma_config.update(args)
+        self.ma_config.set('device', torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'))
+        self.ma_config.set("model_dir",ma_load_path)
+        self.ma_config.set("model_num",ma_model_num)
+        self.ma_config.set("restore",False)
+        self.ma_config.set("test_flag",True)
+        self.ma_config.env = "Target_FormationPlanEnv-v0"#"Target_FormationPlanEnv-v0"#"Test_FormationPlanEnv-v0"#'Relative_affine_FormationPlanEnv-v0'#"FormationPlanEnv-v0"#		
+        self.ma_config.set("dim_state",self.dummy_env.node_feature_dim)
+        self.ma_config.set("dim_action",self.dummy_env.dim_action)
+        self.ma_config.n_agents = self.dummy_env.max_agents
+        ma_model_name = "test"
+        self.ma_writer = rllib.basic.create_dir(self.ma_config, ma_model_name)
+
+        self.ma_method = MA_Method(self.ma_config, self.ma_writer)
+        self.ma_method.models_to_load = [self.ma_method.actor,self.ma_method.critic]
+        self.ma_method._load_model()
+
+    def marl_distributed_reset(self):
+        update_drone_state_array = np.zeros((self.num_agent,6))
+        update_dyn_obs_state_array = np.zeros((self.num_dyn_obs,6))
+        for i in range(self.num_agent):
+            drone_id = self.traj2drone_id_map[i]
+            update_drone_state_array[i,:] =  self.drone_state[drone_id][:-1]
+
+        for i in range(self.num_dyn_obs):
+            drone_id = self.dynamic_obs_index_list[i]
+            update_dyn_obs_state_array[i,:] = self.drone_state[drone_id][:-1]
+
+
+
+        self.dummy_env.reset_dummy_env(self.formation_origin,update_drone_state_array, update_dyn_obs_state_array, self.two_points_static_obs_list)
+        
+
+    def marl_distributed_controller(self, step, optimized_total_waypoints):
+        final_action_dict = np.zeros((self.num_agent,3))
+        update_drone_state_array = np.zeros((self.num_agent,6))
+        update_dyn_obs_state_array = np.zeros((self.num_dyn_obs,6))
+
+        cur_ref_pos_agn = optimized_total_waypoints[:,step,:3] + self.formation_origin
+
+        next_ref_pos_agn = []
+        for i in range(self.dummy_env.future_ref_frame):
+            # if self.counter+1+i < self.total_traj_steps-1:
+            next_ref_pos_agn.append( (optimized_total_waypoints[:self.num_agent, min(step+(1+i)*self.traj_step_jump, optimized_total_waypoints.shape[1]-1), :2]+self.formation_origin[:2]).T )
+
+
+
+        for i in range(self.num_agent):
+            drone_id = self.traj2drone_id_map[i]
+            update_drone_state_array[i,:] =  self.drone_state[drone_id][:-1]
+
+        for i in range(self.num_dyn_obs):
+            drone_id = self.dynamic_obs_index_list[i]
+            update_dyn_obs_state_array[i,:] = self.drone_state[drone_id][:-1]
+        
+        ###参考轨迹本身的顺序就是和dummy env中的agent编号一致
+        xy_cur_ref_pos_agn = cur_ref_pos_agn[:,:2]
+        z_cur_ref_pos_agn = cur_ref_pos_agn[:,-1]
+        # for i in range(self.num_agent):
+        #     z_cur_ref_pos_agn[i] += i 
+
+        obs_dict = self.dummy_env.update_dummy_env(update_drone_state_array, update_dyn_obs_state_array, xy_cur_ref_pos_agn.T, next_ref_pos_agn)
+        dec_state_graph = Batch.from_data_list([data_graph_to_cuda(local_graph) for local_graph in obs_dict[0]])
+        dec_state_img = obs_dict[1].cuda()
+        dec_state = (dec_state_graph, dec_state_img, [self.num_agent])
+
+        action_dict = self.ma_method.actor(dec_state)
+        action_dict = action_dict.cpu().detach().numpy().squeeze()
+
+        final_action_dict[:,:2] = self.dummy_env.preprocess(action_dict).T
+
+        ##z轴
+        kp = 0.6
+        final_action_dict[:,-1] = kp*(z_cur_ref_pos_agn - update_drone_state_array[:,2]) 
+
+        return np.clip(final_action_dict,-self.VEL_LIMIT,self.VEL_LIMIT)
+
+    ################################################################
 
     def get_crossing(self,s1,s2):
         xa,ya = s1[0],s1[1]
@@ -136,8 +232,13 @@ class Trajectory_manager(object):
         Add obstacles to r-tree
         :param obstacles: list of obstacles
         """
-        for obstacle in obstacles:
-            yield (uuid.uuid4(), obstacle, obstacle)
+        self.two_points_static_obs_list = obstacles.copy() 
+        self.num_sta_obs = len(self.two_points_static_obs_list)
+        for i in range(len(obstacles)):
+            obstacle = obstacles[i]
+            # obstacle[:2] = obstacle[:2]-0.3
+            # obstacle[-2:] = obstacle[-2:]+0.3
+            yield (i, obstacle, obstacle)
 
 
     def pub_front_end_traj(self,frontend_publisher,front_end_traj,frame_id):
@@ -457,6 +558,15 @@ class Trajectory_manager(object):
 
             enu_init_formation = TM.optimized_total_waypoints[:,0,:2] + self.formation_origin[:2]  
 
+            ###如果用的是提前预设好的地图，则障碍物的位置应以formation_origin为基准重新设置位置
+            if self.flag_use_rtk_sta_obs is False:
+                for i in range(len(self.two_points_static_obs_list)):
+                    self.two_points_static_obs_list[i][0] += self.formation_origin[0]
+                    self.two_points_static_obs_list[i][2] += self.formation_origin[0]
+                    self.two_points_static_obs_list[i][1] += self.formation_origin[1]
+                    self.two_points_static_obs_list[i][3] += self.formation_origin[1]
+                    
+
             ###使用匈牙利算法计算轨迹起点匹配,行序列为formation_id,列序列为drone_id
             cost_matrix = np.zeros((num_agent,num_agent))
             for i in range(num_agent):
@@ -473,6 +583,7 @@ class Trajectory_manager(object):
             break
 
         self.stage = "Init_formation"
+
 
 
     def real_callback_control_loop(self,event):
@@ -580,7 +691,7 @@ class Trajectory_manager(object):
                 # print("pos of drone"+str(i)+":",pos_err,flag_record,self.drone_state[i,:3])
 
             # if flag_step: self.traj_step += 20
-            self.traj_step += 20
+            self.traj_step += self.traj_step_jump#20
 
             # print("flag_next_stage",flag_next_stage)
             if flag_next_stage:
@@ -643,12 +754,25 @@ class Trajectory_manager(object):
             
             if flag_next_stage:
                 self.stage = "Formation_navigation"   
+                
+                ###TODO:
+                self.marl_distributed_reset()
+
+                
 
 
         elif self.stage=="Formation_navigation":
             step = min(self.traj_step,self.optimized_total_waypoints.shape[1]-1)
             flag_step = True
             flag_next_stage = True
+            
+            
+            ######new
+
+            final_action_array = self.marl_distributed_controller(step, self.optimized_total_waypoints.copy())
+
+            ####
+            
             for i in range(self.num_agent):
                 drone_id = self.traj2drone_id_map[i]
                 pos_step = step+20
@@ -670,8 +794,13 @@ class Trajectory_manager(object):
                 kp=0.6#0.5
                 kv=1.05
 
-                output = pos_error*kp + target_vel*kv#2.5
-                output = np.clip(output,-2,2)
+                #####pid_controller
+                # output = pos_error*kp + target_vel*kv#2.5
+                # output = np.clip(output,-self.VEL_LIMIT,self.VEL_LIMIT)
+
+                #####marl controller
+                output = final_action_array[i,:]
+
                 drone_vel = Twist() 
                 drone_vel.linear.x = output[0]
                 drone_vel.linear.y = output[1]
@@ -687,7 +816,10 @@ class Trajectory_manager(object):
                 temp[-1] = 0
                 final_target_pos = self.formation_origin + temp
                 target_error = final_target_pos - current_pos
-                flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<0.05)
+
+                # flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<0.05)
+                flag_next_stage = flag_next_stage and (np.linalg.norm(target_error)<self.finish_threshold*2)
+
 
                 real_temp = self.optimized_total_waypoints[i,step,:].copy() 
                 real_temp[-1] = 0
@@ -706,7 +838,7 @@ class Trajectory_manager(object):
                 # print("pos of drone"+str(i)+":",pos_err,flag_record,self.drone_state[i,:3])
 
             # if flag_step: self.traj_step += 20
-            self.traj_step += 1
+            self.traj_step += self.traj_step_jump#1
 
             print("flag_next_stage",flag_next_stage)
             if flag_next_stage:
@@ -930,7 +1062,8 @@ if __name__ == "__main__":
                             goal_point.pose.orientation.w=1  
                             goal_point.header.stamp = rospy.Time.now()
                             TM.goal_publisher_list[drone_id].publish(goal_point) 
-                            print("pos of drone"+str(drone_id)+":",TM.drone_state[drone_id][:3])
+                            
+                            # print("pos of drone"+str(drone_id)+":",TM.drone_state[drone_id][:3])
 
 
                         if TM.stage == "Target_formation":

@@ -58,3 +58,36 @@ use 2D Nav Goal to set the destination of planning
 
 2. open the teamrl_controller_obs_avoid program:
 cd ~/5G_edge_ws/src/drone/scripts/MavenRL/real_controller && python teamrl_controller_obs_avoid.py
+
+
+#######final exam##################
+
+###communication between three zones: yuquan--ssh->huzhou--ssh->gongyuan
+
+###huzhou: server
+ssh server@172.16.20.15
+pwd:zju104104
+###gongyuan:5g-new
+ssh ubuntu@172.17.10.3
+###yuquan:5g
+ssh ubuntu@172.16.10.3
+
+
+client send to server
+
+###1. operation on huzhou
+ssh server@172.16.20.15
+pwd:zju104104
+cd ~/DTD && python server.py
+
+###2. operation on yuquan104
+cd ~/DTD && python c2s.py -c
+
+###3.operation on gongyuan
+ssh server@172.16.20.15
+pwd:zju104104
+ssh ubuntu@172.17.10.3
+cd ~ &&  python c2s.py -s
+
+
+
