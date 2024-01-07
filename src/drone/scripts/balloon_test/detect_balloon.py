@@ -271,7 +271,8 @@ def detect(img_raw):
 class call_back_template(object):
     def __init__(self, name):
         self._name = name
-        self._id = int(name[-1])
+        # self._id = int(name[-1])
+        self._id = int(name.split("_")[-1])
 
     def __call__(self,ros_img):
         global target_pos_pub_list

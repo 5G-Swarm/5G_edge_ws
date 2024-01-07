@@ -1,0 +1,19 @@
+debug_mode: False
+use_log: True
+robot_id: 20
+
+role_info:
+    is_client: False
+    id: 'edge-01'
+
+network_info:
+    ip: '127.0.0.1'
+
+    target_info:
+        ip: '127.0.0.1'
+
+message_info:
+    ctrl:
+        is_tcp: True
+        port: 16000
+

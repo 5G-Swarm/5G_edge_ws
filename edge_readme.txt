@@ -14,6 +14,7 @@ Edge端操作手册：
 ##三, edge端运行
 1. wait for all ms.
 2. start the edge-5g-transfer: 
+cd ~/5G_edge_ws && source devel/setup.bash && conda activate base
 cd ~/5G_edge_ws/src/ros-edge-transfer/ros-edge-transfer/scripts && python edge-drone.py
 #check state topics: 
 rostopic hz /drone_state_x 
@@ -24,7 +25,9 @@ cd ~/5G_edge_ws/src/drone/scripts/balloon_test && python detect_balloon.py
 
 4. before drones taking off(to get the initiate altitudes), open the balloon location estimation program:
 #remember to adjust the ros parameter of "uav_num" in ~/5g-ws/src/balloon_estimation/launch/balloon_estimation.launch line 6
-cd  ~/5G_edge_ws && roslaunch balloon_estimation balloon_estimation.launch
+
+cd ~/5G_edge_ws && source devel/setup.bash  && roslaunch balloon_estimation balloon_estimation.launch
+
 
 5. open the teamrl_controller program:
 #Note:check the loaded model,  

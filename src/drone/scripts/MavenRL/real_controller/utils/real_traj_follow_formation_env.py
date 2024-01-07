@@ -89,7 +89,7 @@ class trajFollowFormationEnv(gym.Env):
         self.collision_free_threshold = 1.5#1.5#3#1.5#5#10
         self.inter_agent_collision_threshold = 0.3#0.3
         self.finish_threshold = 0.5
-        self.obstacle_size = 0.3
+        self.obstacle_size = 0.6#0.3
         
         
         # self.affine_finish_threshold_list = np.array([1-np.cos(np.pi/3),0.5,0.5,0.5,1])

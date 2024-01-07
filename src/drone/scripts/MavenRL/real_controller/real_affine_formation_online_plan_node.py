@@ -28,7 +28,9 @@ from rl_code.args import EnvParams,generate_args
 
 from real_controller.utils.Experience_Graph import Experience_Graph,generate_ring_graph,generate_fully_connected_graph,data_graph_to_cuda
 
-ma_load_path = "../rl_code/results/affine_formation/distributed_traj_follow/delay_system/saved_models"
+# ma_load_path = "../rl_code/results/affine_formation/distributed_traj_follow/delay_system/saved_models"
+ma_load_path = "../rl_code/results/affine_formation/distributed_traj_follow/2023-12-10-15:16:53----two_obs_delaysingle0.7_non_convex_random_obs_vel/saved_models"
+
 ma_model_num = -1
 
 class Trajectory_manager(object):
@@ -1057,9 +1059,9 @@ if __name__ == "__main__":
     
     ###constant######parameter###
     config = {}
-    config["static_obs_index_list"] = [1,2,5]
+    config["static_obs_index_list"] = []#[1,2,5]
     config["dynamic_obs_index_list"] = []
-    config["drone_index_list"] = [7,9,11,12]#12,13,3,4,5
+    config["drone_index_list"] = [5,9,11,12]#12,13,3,4,5
     
     config["num_agent"] = len(config["drone_index_list"])
     config["down_sampling_rate"] = 1
@@ -1078,7 +1080,7 @@ if __name__ == "__main__":
     config["traj_step_jump"] = 20#20
     config["VEL_LIMIT"] = 1.5#1.5#1.5
     config["finish_threshold"] = 0.5
-    config["target_z_height"] = 6
+    config["target_z_height"] = 9
     config["formation_origin"] = np.array([0,0,config["target_z_height"]])   
 
 
@@ -1109,7 +1111,7 @@ if __name__ == "__main__":
 
     ### debug param
     for scene_kind in ["exp"]:#["spa","mid","den"]:
-        for scene_id in [22]:#[1,2,3,4,5,6,7,8,9,10]
+        for scene_id in [21]:#[1,2,3,4,5,6,7,8,9,10]
             # fname_folder = "/home/ubuntu/Shahao/MavenRL/rrt_algorithms/output/"+"obs_"+scene_kind+"/"+scene_kind+str(scene_id)
             fname_scene_bag_base = "/home/ubuntu/Shahao/MavenRL/rrt_algorithms/output/Base_scene_bag/"+"obs_"+scene_kind+"/"+scene_kind+str(scene_id)
             fname_front_end_base = "/home/ubuntu/Shahao/MavenRL/rrt_algorithms/output/Base_front_end/"+"obs_"+scene_kind+"/"+scene_kind+str(scene_id)

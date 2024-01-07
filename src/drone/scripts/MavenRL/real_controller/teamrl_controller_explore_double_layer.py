@@ -128,7 +128,8 @@ def call_back_target_groundtruth(drone_state):
 class call_back_template_bbx(object):
 	def __init__(self, name):
 		self._name = name
-		self._id = int(name[-1])
+		# self._id = int(name[-1])
+		self._id = int(name.split("_")[-1])
 
 	def __call__(self,ros_target_Pose):
 		# if real_env.state_drones_dict.has_key(self._id):

@@ -22,6 +22,8 @@ import time
 torch.autograd.set_detect_anomaly(True)
 
 
+
+
 class MATD3_DEC(MethodSingleAgent):
     gamma = 0.99
     lambda_bc = 4
@@ -35,21 +37,21 @@ class MATD3_DEC(MethodSingleAgent):
     tau = 0.005
 
     # buffer_size = 500000
-    buffer_size = 15000#10000#50000
+    buffer_size = 20000#10000#50000
 
     batch_size = 16#16#256#16#256#16
 
     policy_freq = 4
-    explore_noise_ub = 0.5#0.2
+    explore_noise_ub = 0.1#0.2
     explore_noise_lb = 0.05#0.7
     explore_noise_decay_rate = 0.9999
 
     policy_noise = 0.05#0.05#0.05#0.2
     noise_clip = 0.5
 
-    start_timesteps = 15000#30000#10000#30000#10000#30000
+    start_timesteps = 0#60000#30000#10000#30000#10000#30000
     start_buffersize = 0#20000
-    start_actor_update = 15000#20000#300000
+    start_actor_update = 20000#300000
 
     save_model_interval = 4000#4000#4000#800
 
@@ -213,8 +215,9 @@ class MATD3_DEC(MethodSingleAgent):
     @torch.no_grad()
     def select_action(self, state, n_agent, random_flag): 
         self.select_action_start()
-
+        flag_expert = False
         if self.step_select < self.start_timesteps:
+            flag_expert = True
             # if torch.Tensor(1).uniform_(0,1)<0.5:
             if random_flag:
                 action = torch.Tensor(n_agent,self.dim_action).uniform_(-1,1)#.cuda() 
@@ -223,9 +226,12 @@ class MATD3_DEC(MethodSingleAgent):
                 id_list = [i+i*n_agent for i in range(n_agent)]
                 # action = ((state_graph.x[id_list, 2:4] - state_graph.x[id_list, :2])*10).clamp(-1,1)
                 # action = (state_graph.x[id_list, :2]*10).clamp(-1,1)
-                action = (state_graph.x[id_list, 2:4]*3).clamp(-1,1)
+                # action = (state_graph.x[id_list, 2:4]*3).clamp(-1,1)
+                action = (0.5*state_graph.x[id_list, 2:4]*3 + 0.5*(state_graph.x[id_list, 4:6] - state_graph.x[id_list, 2:4])/0.1  ).clamp(-1,1)
+                
                 # action = self.expert_policy(state_graph.x[id_list, :])
         else:
+            flag_expert = False
             self.explore_noise = max(self.explore_noise_ub * np.power(self.explore_noise_decay_rate,self.step_select/50),self.explore_noise_lb)
             noise = torch.normal(0, self.explore_noise, size=(n_agent,self.dim_action)).cuda()
             self.writer.add_scalar('method/explore_noise', self.explore_noise, self.step_update)
@@ -234,7 +240,8 @@ class MATD3_DEC(MethodSingleAgent):
             action = self.actor(state)
             action = (action + noise.squeeze()).clamp(-1,1)
             # action = action.cpu()
-        return action
+        
+        return action, flag_expert
 
     def _update_model(self):
         # print('[update_parameters] soft update')

@@ -15,14 +15,18 @@ from geometry_msgs.msg import TwistStamped,PoseStamped,Vector3
 from std_msgs.msg import Header
 from autoware_msgs.msg import DroneSyn
 from nav_msgs.msg import Path
-from proto.python_out import drone_state_msgs_pb2, drone_cmd_msgs_pb2
+from proto.python_out import drone_state_msgs_pb2, drone_cmd_msgs_pb2, ctrl_msgs_pb2
 import utm
+
+
+vehicle_id = 19
+leader_id = 7
 
 TRANS2CLOUD = True
 
 cv_bridge = CvBridge()
 
-robot_num = 20
+robot_num = 15#20
 ifm_r2e_dict = {}
 ifm_e2c_dict = {}
 
@@ -102,12 +106,29 @@ def parse_state(message, robot_id):
     ts_nsecs = int(message[10:19].decode())
     message_data = message[19:]
 
+
+
     state = drone_state_msgs_pb2.DroneState()
     state.ParseFromString(message_data)
     ############################################################
     robot_id_set.add(robot_id)
     print(robot_id_set, 'drone:', len(robot_id_set))
+    print("gps_of_drone_", robot_id,state.gps.lat_y, state.gps.lon_x, state.gps.alt_z)
     if TRANS2CLOUD: send_cloud_state(state.gps.lat_y, state.gps.lon_x, robot_id)
+
+    ############
+    if robot_id == leader_id:
+        try:
+            msg = ctrl_msgs_pb2.Ctrl()
+            msg.flag = 3
+            msg.v = state.gps.lat_y
+            msg.w = state.gps.lon_x
+            cmd_data = msg.SerializeToString()
+            ifm_r2e_dict[vehicle_id].send_ctrl(cmd_data)
+            print("success to send to vehicle:", vehicle_id)
+        except:
+            print("fail to send to vehicle:", vehicle_id)
+            pass
     ############################################################
     drone_gps = NavSatFix()
     drone_gps.latitude = state.gps.lat_y
@@ -183,6 +204,11 @@ class ServerR2E(Informer):
         self.send(message, 'cmd')
         # print("finish_send")
 
+
+class ServerV2E(Informer):
+    def send_ctrl(self, message):
+        self.send(message, 'ctrl')
+
 #############################################
 
 def parse_path(message, robot_id):
@@ -242,6 +268,7 @@ def start_r2e():
     global ifm_r2e_dict
     for i in range(robot_num):
         ifm_r2e_dict[i] = ServerR2E(config = 'config_drone.yaml', robot_id = i)
+    ifm_r2e_dict[vehicle_id] = ServerV2E(config = 'config_vehicle.yaml', robot_id = vehicle_id)
 
 def start_e2c():
     global ifm_e2c_dict
